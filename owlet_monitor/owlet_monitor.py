@@ -7,8 +7,8 @@
 # $ pip3 install pycryptodome
 
 import sys, os, time, requests, json
-from owlet_monitor.OwletStatus import OwletStatus
-from owlet_monitor.exporters import PrometheusExporter
+from .owlet_status import OwletStatus
+from .exporters import PrometheusExporter
 
 sess = None
 url_props = None

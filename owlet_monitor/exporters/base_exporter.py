@@ -1,5 +1,5 @@
 from abc import ABCMeta, abstractmethod
-from .. import OwletStatus
+from ..owlet_status import OwletStatus
 
 
 class BaseExporter():

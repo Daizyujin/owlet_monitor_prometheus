@@ -1,4 +1,4 @@
-from ..OwletStatus import OwletStatus
+from ..owlet_status import OwletStatus
 from .base_exporter import BaseExporter
 from prometheus_client import Gauge, start_http_server, Counter
 
