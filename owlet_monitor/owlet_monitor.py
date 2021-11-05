@@ -7,7 +7,8 @@
 # $ pip3 install pycryptodome
 
 import sys, os, time, requests, json
-from OwletStatus import OwletStatus
+from owlet_monitor.OwletStatus import OwletStatus
+from owlet_monitor.exporters import PrometheusExporter
 
 sess = None
 url_props = None
@@ -148,7 +149,7 @@ def fetch_props():
     return my_props
 
 
-def record_vitals(p):
+def record_vitals(p) -> OwletStatus:
     status = OwletStatus(p)
     disp = "%d, " % time.time()
     if status.charge_status >= 1:
@@ -168,9 +169,11 @@ def record_vitals(p):
         else:
             raise FatalError("Unexpected base_station_on=%d" % status.base_station_on)
     log("%s Status: " % status.device_sn + disp)
+    return status
 
 
 def loop():
+    exporters = [PrometheusExporter()]
     global sess
     sess = requests.session()
     while True:
@@ -178,19 +181,13 @@ def loop():
             login()
             fetch_dsn()
             for prop in fetch_props():
-                record_vitals(prop)
+                status = record_vitals(prop)
+                if status:
+                    for exporter in exporters:
+                        exporter.export(status)
             time.sleep(10)
         except requests.exceptions.RequestException as e:
             log('Network error: %s' % e)
             time.sleep(1)
             sess = requests.session()
 
-def main():
-    try:
-        loop()
-    except FatalError as e:
-        sys.stderr.write('%s\n' % e)
-        sys.exit(1)
-
-if __name__ == "__main__":
-    main()

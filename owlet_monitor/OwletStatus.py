@@ -1,4 +1,4 @@
-from helpers import safe_get
+from owlet_monitor.helpers import safe_get
 
 
 class OwletStatus:
