@@ -7,6 +7,7 @@
 # $ pip3 install pycryptodome
 
 import sys, os, time, requests, json
+from OwletStatus import OwletStatus
 
 sess = None
 url_props = None
@@ -146,31 +147,28 @@ def fetch_props():
         my_props.append(device_props)
     return my_props
 
+
 def record_vitals(p):
-    device_sn = p['DSN']
-    charge_status = p['CHARGE_STATUS']['value']
-    base_station_on = p['BASE_STATION_ON']['value']
-    heart = "%d" % p['HEART_RATE']['value']
-    oxy = "%d" % p['OXYGEN_LEVEL']['value']
-    mov = "wiggling" if p['MOVEMENT']['value'] else "still"
+    status = OwletStatus(p)
     disp = "%d, " % time.time()
-    if charge_status >= 1:
-        disp += "sock charging (%d)" % charge_status
+    if status.charge_status >= 1:
+        disp += "sock charging (%d)" % status.charge_status
         # base_station_on is (always?) 1 in this case
-    elif charge_status == 0:
-        if base_station_on == 0:
+    elif status.charge_status == 0:
+        if status.base_station_on == 0:
             # sock was unplugged, but user did not turn on the base station.
             # heart and oxygen levels appear to be reported, but we can't
             # yet assume the sock was placed on the baby's foot.
             disp += "sock not charging, base station off"
-        elif base_station_on == 1:
+        elif status.base_station_on == 1:
             # base station was intentionally turned on, the sock is presumably
             # on the baby's foot, so we can trust heart and oxygen levels
-            disp += heart + ", " + oxy + ", " + mov + ", " + device_sn
+            disp += status.heart + ", " + status.oxy + ", " + status.mov + ", " + status.device_sn
             record(disp)
         else:
-            raise FatalError("Unexpected base_station_on=%d" % base_station_on)
-    log("%s Status: " % device_sn + disp)
+            raise FatalError("Unexpected base_station_on=%d" % status.base_station_on)
+    log("%s Status: " % status.device_sn + disp)
+
 
 def loop():
     global sess
