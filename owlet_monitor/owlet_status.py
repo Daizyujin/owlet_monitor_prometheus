@@ -13,3 +13,5 @@ class OwletStatus:
         self.movement_level = "%d" % safe_get(properties, [['REAL_TIME_VITALS', 'value', 'mv']], 0)
         self.sock_off = "%d" % safe_get(properties, [['SOCK_OFF', 'value']], 0)
         self.base_station_on = safe_get(properties, [['BASE_STATION_ON', 'value']], 0)
+        self.charge_status = safe_get(properties, [['CHARGE_STATUS', 'value']], 0)
+        self.base_station_on = safe_get(properties, [['BASE_STATION_ON', 'value']], 0)
