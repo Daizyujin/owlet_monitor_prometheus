@@ -3,7 +3,7 @@ name: Main
 on: [push, pull_request]
 
 jobs:
-  build-asp:
+  build-docker:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
