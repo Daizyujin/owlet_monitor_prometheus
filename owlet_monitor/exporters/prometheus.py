@@ -17,8 +17,8 @@ class PrometheusExporter(BaseExporter):
     def export(self, status: OwletStatus):
         """Maps OwletStatus to Prometheus metrics and updates them"""
         self.metric_base_station_on.labels(status.device_sn).set(status.base_station_on)
-        self.metric_heart.labels(status.device_sn).set(status.heart)
-        self.metric_oxy.labels(status.device_sn).set(status.oxy)
+        self.metric_heart.labels(status.device_sn).set(status.heart_rate)
+        self.metric_oxy.labels(status.device_sn).set(status.oxygen_level)
         self.metric_charge_status.labels(status.device_sn).set(status.charge_status)
         self.metric_owlet_api_updates.labels(status.device_sn).inc()
 

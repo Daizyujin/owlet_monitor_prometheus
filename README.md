@@ -42,3 +42,10 @@ were reverse-enginered from Owlet's Android app.
 
 You can place "index.html" and "logfile" in a directory served by a web server
 and browse "index.html?logfile" to see a chart.
+
+### API response examples
+
+```
+REAL_TIME_VITALS
+{'type': 'Property', 'base_type': 'string', 'read_only': True, 'direction': 'output', 'scope': 'user', 'data_updated_at': '2021-11-07T01:35:05Z', 'key': 0000, 'device_key': 0000, 'product_name': '0000', 'track_only_changes': False, 'display_name': 'Real-Time Vitals', 'host_sw_version': False, 'time_series': False, 'derived': False, 'app_type': None, 'recipe': None, 'value': '{"ox":99,"hr":134,"mv":0,"sc":2,"st":33,"bso":1,"bat":95,"btt":925,"chg":0,"aps":0,"alrt":0,"ota":0,"srf":0,"rsi":55,"sb":0}', 'denied_roles': [], 'ack_enabled': False, 'retention_days': 30, 'ack_status': None, 'ack_message': None, 'acked_at': None}
+```

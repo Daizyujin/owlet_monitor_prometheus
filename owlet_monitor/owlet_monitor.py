@@ -38,16 +38,20 @@ region_config = {
     }
 }
 
+
 class FatalError(Exception):
     pass
+
 
 def log(s):
     sys.stderr.write(s + '\n')
     sys.stderr.flush()
 
+
 def record(s):
     sys.stdout.write(s + '\n')
     sys.stdout.flush()
+
 
 def login():
     global auth_token, expire_time, owlet_region
@@ -99,6 +103,7 @@ def login():
     headers['Authorization'] = 'auth_token ' + auth_token
     log('Auth token %s' % auth_token)
 
+
 def fetch_dsn():
     global dsn, url_props, url_activate
     if dsn is None:
@@ -126,18 +131,20 @@ def fetch_dsn():
                 + '/properties/APP_ACTIVE/datapoints.json'
             )
 
+
 def reactivate(url_activate):
     payload = { "datapoint": { "metadata": {}, "value": 1 } }
     r = sess.post(url_activate, json=payload, headers=headers)
     r.raise_for_status()
 
+
 def fetch_props():
     # Ayla cloud API data is updated only when APP_ACTIVE periodically reset to 1.
     my_props = []
     # Get properties for each device; note no pause between requests for each device
-    for device_sn,next_url_activate,next_url_props in zip(dsn,url_activate,url_props):
+    for device_sn,next_url_activate,next_url_props in zip(dsn, url_activate, url_props):
         reactivate(next_url_activate)
-        device_props = {'DSN':device_sn}
+        device_props = {'DSN': device_sn}
         r = sess.get(next_url_props, headers=headers)
         r.raise_for_status()
         props = r.json()
@@ -164,7 +171,7 @@ def record_vitals(p) -> OwletStatus:
         elif status.base_station_on == 1:
             # base station was intentionally turned on, the sock is presumably
             # on the baby's foot, so we can trust heart and oxygen levels
-            disp += status.heart + ", " + status.oxy + ", " + status.mov + ", " + status.device_sn
+            disp += status.heart + ", " + status.oxygen + ", " + status.mov + ", " + status.device_sn
             record(disp)
         else:
             raise FatalError("Unexpected base_station_on=%d" % status.base_station_on)
