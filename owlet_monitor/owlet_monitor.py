@@ -1,10 +1,4 @@
 #!/usr/bin/python3
-#
-# Dependencies (Linux):
-# $ pip3 install python-jwt gcloud sseclient requests_toolbelt
-#
-# Extra dependencies (Windows 10):
-# $ pip3 install pycryptodome
 
 import sys, os, time, requests, json
 from .owlet_status import OwletStatus
@@ -13,7 +7,6 @@ from .exporters import PrometheusExporter
 sess = None
 url_props = None
 url_activate = None
-#headers = {'Content-Type' : 'application/json', 'Accept' : 'application/json'}
 headers = {}
 auth_token = None
 expire_time = 0
@@ -158,24 +151,7 @@ def fetch_props():
 
 def record_vitals(p) -> OwletStatus:
     status = OwletStatus(p)
-    disp = "%d, " % time.time()
-    if status.charge_status >= 1:
-        disp += "sock charging (%d)" % status.charge_status
-        # base_station_on is (always?) 1 in this case
-    elif status.charge_status == 0:
-        if status.base_station_on == 0:
-            # sock was unplugged, but user did not turn on the base station.
-            # heart and oxygen levels appear to be reported, but we can't
-            # yet assume the sock was placed on the baby's foot.
-            disp += "sock not charging, base station off"
-        elif status.base_station_on == 1:
-            # base station was intentionally turned on, the sock is presumably
-            # on the baby's foot, so we can trust heart and oxygen levels
-            disp += status.heart + ", " + status.oxygen + ", " + status.mov + ", " + status.device_sn
-            record(disp)
-        else:
-            raise FatalError("Unexpected base_station_on=%d" % status.base_station_on)
-    log("%s Status: " % status.device_sn + disp)
+    record(json.dumps(status.__dict__))
     return status
 
 
