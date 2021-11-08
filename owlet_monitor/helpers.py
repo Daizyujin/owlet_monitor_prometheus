@@ -6,7 +6,7 @@ def safe_get(p: dict, keys_list: [], default: any) -> any:
     If key does not exist at any point, returns default value given
     Args:
         p(dict): Dictionary
-        keys_list([]): Keys in order
+        keys_list([]): Array of string[] arrays.  Useful for supporting sock v2 and sock v3 property lists
         default(any): Default value if key is missing
     """
     for keys in keys_list:
