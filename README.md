@@ -30,6 +30,11 @@ Set environment variable `OWLET_REGION=europe` if you are in Europe/EU.
 
 See [docs/PROM.md](docs/PROM.md)
 
+## Grafana dashboard
+
+See [docs/grafana_dashboard.json](docs/grafana_dashboard.json) for an example Grafana dashboard using Prometheus.
+This is optional but can serve as a good kick-off for your own dashboard.  (This is the dashboard in the image above)
+
 ## API response examples
 
 ```
