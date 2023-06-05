@@ -7,7 +7,7 @@ class PrometheusExporter(BaseExporter):
 
     def __init__(self):
         """Starts Prometheus web server and creates metrics"""
-        start_http_server(9090)
+        start_http_server(8000)
         self.metric_base_station_on = Gauge('owlet_base_status_on', 'Base Station Power', ['dsn'])
         self.metric_heart = Gauge('owlet_heart_rate', 'Heart rate', ['dsn'])
         self.metric_oxy = Gauge('owlet_oxygen_level', 'Oxygen Status', ['dsn'])
