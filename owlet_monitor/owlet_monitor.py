@@ -151,9 +151,13 @@ def fetch_props():
 
 def record_vitals(p) -> OwletStatus:
     status = OwletStatus(p)
-    record(json.dumps(status.__dict__))
+    record(json.dumps(status.oxygen_level))
+    # record(json.dumps(status.__dict__))
     return status
 
+def get_oxygen_level(p) -> OwletStatus:
+    status = OwletStatus(p)
+    return status.oxygen_level
 
 def loop():
     exporters = [PrometheusExporter()]
@@ -165,12 +169,14 @@ def loop():
             fetch_dsn()
             for prop in fetch_props():
                 status = record_vitals(prop)
-                if status:
+                oxygen = int(get_oxygen_level(prop))
+                if oxygen < 100:
+                    log('Oxygen level is low: %s' % oxygen)
+                    os.system('afplay alarm.mp3')
                     for exporter in exporters:
                         exporter.export(status)
-            time.sleep(10)
+            time.sleep(5)
         except requests.exceptions.RequestException as e:
             log('Network error: %s' % e)
             time.sleep(1)
             sess = requests.session()
-
